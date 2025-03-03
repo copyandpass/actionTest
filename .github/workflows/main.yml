@@ -1,4 +1,4 @@
-name: Java CI
+name: Node.js CI
 
 on:
   push:
@@ -9,35 +9,25 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v2
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: '11'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # 원하는 Node.js 버전
 
-    - name: Cache Maven Packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build with Maven
-      run: mvn clean install
+      - name: Run tests
+        run: npm test
 
-    - name: Run Tests
-      run: mvn test
+      - name: Build project
+        run: npm run build
 
-    - name: Upload Test Results
-      uses: actions/upload-artifact@v4
-      with:
-        name: Test Results
-        path: target/surefire-reports
+      
