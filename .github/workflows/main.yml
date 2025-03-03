@@ -24,6 +24,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Navigate to project directory (if pom.xml is in a subdirectory)
+        run: cd path/to/your/subdirectory  # 예: `cd subdir`로 변경
+
       - name: Build with Maven
         run: mvn clean install
 
