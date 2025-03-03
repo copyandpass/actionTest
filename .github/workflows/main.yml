@@ -16,6 +16,12 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
+    - name: Check Java version
+      run: java -version
+
+    - name: Check javac version
+      run: javac -version
+
     - name: Compile Java code (without JDK setup)
       run: javac -d out $(find . -name "*.java")
 
