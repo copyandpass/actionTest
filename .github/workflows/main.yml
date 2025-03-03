@@ -35,3 +35,13 @@ jobs:
 
     - name: Run tests
       run: java -cp "out:libs/junit-platform-console-standalone-1.8.2.jar" org.junit.platform.console.ConsoleLauncher --scan-classpath
+
+    - name: Send Slack notification
+      if: success()  # 테스트가 성공하면 알림을 보냅니다.
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"CI 빌드가 성공적으로 완료되었습니다! \n<URL_TO_REPOSITORY>"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Send Slack notification (Failure)
+      if: failure()  # 테스트가 실패하면 알림을 보냅니다.
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{"text":"CI 빌드에 실패했습니다. \n<URL_TO_REPOSITORY>"}' ${{ secrets.SLACK_WEBHOOK_URL }}
